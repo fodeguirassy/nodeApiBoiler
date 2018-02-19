@@ -1,5 +1,10 @@
 module.exports = (app) => {
 
-  return {}
+    return {
+
+        RegisterWithFacebook: require('./facebookRegister')(app),
+        RegisterWithGoogle: require('./googleRegister')(app),
+        registerWithLocal: require ('./localRegister')(app)
+    }
 
 }

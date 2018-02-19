@@ -1,62 +1,67 @@
-const FacebookStrategy = require('passport-facebook').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy
+const GoogleStrategy = require('passport-google-oauth20').Strategy
+const LocalStrategy = require('passport-local').Strategy
 const passport = require('passport')
-const FacebookTokenStrategy = require('passport-facebook-token');
+const sha1 = require('sha1')
+
 
 module.exports = (app) => {
 
-  const User = app.models.User;
-  const Picture = app.models.Picture;
+    const Local = app.models.Local
+    const User = app.models.User
 
-  let pass = passport.use(new FacebookStrategy({
-      clientID: app.settings.facebook.clientID,
-      clientSecret: app.settings.facebook.secretKey,
-      callbackURL: "/auth/facebook/callback",
-      profileFields: ['id', 'email', 'displayName', 'photos', 'birthday', 'first_name',
-        'last_name', 'gender', 'address'
-      ],
-      scope: ['email', 'public_profile']
-    },
 
-    (accessToken, refreshToken, profile, done) => {
-      done(null, profile)
-    }
-  ));
+    let pass = passport.use(new FacebookStrategy({
+            clientID: app.settings.facebook.clientID,
+            clientSecret: app.settings.facebook.secretKey,
+            callbackURL: "/auth/facebook/callback",
+            profileFields: ['id', 'email', 'displayName', 'photos', 'birthday', 'first_name',
+                'last_name', 'gender', 'address'
+            ],
+            scope: ['email', 'public_profile']
+        },
 
-  /*
-    passport.use(new FacebookTokenStrategy({
-      clientID: app.settings.facebook.clientID,
-      clientSecret: app.settings.facebook.secretKey
-      //callbackURL: "/auth/facebook/token/callback",
-      //profileFields: ['id', 'email', 'displayName', 'photos', 'birthday', 'first_name',
-      //'last_name', 'gender', 'address'
-      //]
-    }, (token, refreskToken, profile, done) => {
-
-      console.log(profile);
-
-      User.findOne({
-        where: {
-          token: profile.id
+        (accessToken, refreshToken, profile, done) => {
+            done(null, profile)
         }
-      }).then(user => {
+    ));
+
+    pass.use(new GoogleStrategy({
+            clientID: app.settings.google.clientId,
+            clientSecret: app.settings.google.clientSecret,
+            callbackURL: app.settings.google.callbackURL
+        }, function (accessToken, refreshToken, profile, cb) {
+
+            return cb(null, profile);
+        }
+    ));
+
+    pass.use(new LocalStrategy({usernameField: 'email'},
+
+        function (username, password, cb) {
+
+            Local.findOne({where: {email: username, password: sha1(password)}})
+                .then( (local) => {
+                    cb(null, local)
+                }).catch((err) => {
+            })
+        }
+    ));
+
+    pass.serializeUser(function (user, done) {
         done(null, user);
-        //createOrUpdateUSer(user, profile, done);
-      }).catch(err => {
-        console.log(err);
-        done(err)
-      });
+    });
 
-    }));
-  */
+    pass.deserializeUser(function (user, done) {
 
-  pass.serializeUser(function(user, done) {
-    done(null, user);
-  });
+        User.findOne({where: {id: user.id}})
+            .then((user) => {
+                if (user) done(null, user);
+            }).catch((err) => {
+            done(err)
+        })
+    });
 
-  pass.deserializeUser(function(user, done) {
-    done(null, user);
-  });
-
-  app.passport = pass;
+    app.passport = pass;
 
 };

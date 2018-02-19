@@ -5,5 +5,11 @@ module.exports = (app) => {
   router.get('/',
     app.actions.user.findAll
   );
-  return router;
+
+  router.post('/',
+      app.middleware.controller.Local,
+      app.actions.auth.registerWithLocal
+  )
+
+    return router;
 }

@@ -1,7 +1,8 @@
 module.exports = (app) => {
 
-  app.middleware = {
-    graph: require('fbgraph')
-  }
+    app.middleware = {
+        bodyParser: require('body-parser'),
+        controller:  require('./controller')(app)
+    }
 
 }
