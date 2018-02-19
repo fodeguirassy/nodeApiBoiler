@@ -2,6 +2,7 @@ const app = require('express')();
 require('./settings')(app);
 require('./database')(app);
 require('./models')(app);
+require('./mailer')(app);
 require('./middleware')(app);
 require('./passport')(app);
 require('./boot')(app);

@@ -21,6 +21,7 @@
     "http": "0.0.0",
     "method-override": "^2.3.10",
     "mysql2": "^1.5.1",
+    "nodemailer": "^4.4.2",
     "nodemon": "^1.14.3",
     "observerable": "0.0.4",
     "passport": "^0.4.0",
@@ -29,6 +30,7 @@
     "passport-google-oauth2": "^0.1.6",
     "passport-google-oauth20": "^1.0.0",
     "passport-local": "^1.0.0",
+    "randomstring": "^1.1.5",
     "rx": "^4.1.0",
     "sequelize": "^4.28.6",
     "sha1": "^1.1.1"

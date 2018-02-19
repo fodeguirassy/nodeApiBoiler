@@ -9,7 +9,8 @@ module.exports = (app) => {
         currentProfile: Sequelize.STRING,
         currentName: Sequelize.STRING,
         currentCity: Sequelize.STRING,
-        currentEmail: Sequelize.STRING
+        currentEmail: Sequelize.STRING,
+        currentPassword: Sequelize.STRING
     });
 
 };

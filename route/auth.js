@@ -18,22 +18,22 @@ module.exports = (app) => {
 
     router.get('/facebook/callback',
         app.passport.authenticate('facebook', {failureRedirect: '/'}),
+        app.middleware.mailer.send,
         app.actions.auth.RegisterWithFacebook
     );
 
     router.get('/google/callback',
         app.passport.authenticate('google', {failureRedirect: '/login'}),
+        app.middleware.mailer.send,
         app.actions.auth.RegisterWithGoogle)
 
 
     //Authenticate local
     router.post('/login',
-
         app.middleware.bodyParser.json(),
-
         function (req, res, next) {
             app.passport.authenticate('local', function (err, local, info) {
-                if(local) res.status(200).send(local.dataValues)
+                if (local) res.status(200).send(local.dataValues)
                 else res.status(404).send(err)
             })(req, res, next);
         })

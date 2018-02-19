@@ -17,7 +17,7 @@
         POST -> /auth/login
 
         #Facebook & Google
-        GET -> /authenticate
+        GET -> /auth/authenticate
 
 
     #user

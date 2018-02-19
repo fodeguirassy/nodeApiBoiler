@@ -16,7 +16,11 @@ module.exports = (app) => {
         pictureUrl : user.photos[0].value
       }
 
-      User.create({currentProfile: 'facebook', currentName: facebookProfile.name, currentEmail: facebookProfile.email})
+      User.create({currentProfile: 'facebook',
+          currentName: facebookProfile.name,
+          currentEmail: facebookProfile.email,
+          currentPassword: req.defaultPassword
+      })
           .then((user) => {
               Profile.create()
                 .then((profile) => {

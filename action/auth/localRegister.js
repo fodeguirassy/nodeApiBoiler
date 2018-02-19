@@ -1,4 +1,3 @@
-
 module.exports = (app) => {
 
     return function (req, res) {
@@ -9,21 +8,26 @@ module.exports = (app) => {
 
         let rawLocal = req.local
 
-        User.create( { currentProfile: 'local', currentName: rawLocal.name, currentEmail: rawLocal.email } )
+        User.create({
+            currentProfile: 'local',
+            currentName: rawLocal.name,
+            currentEmail: rawLocal.email,
+            currentPassword: rawLocal.password
+        })
 
-            .then( (user) => {
+            .then((user) => {
 
                 Profile.create()
-                    .then( (profile) => {
+                    .then((profile) => {
                         Local.create(rawLocal)
-                            .then( (local) => {
+                            .then((local) => {
                                 profile.setLocal(local)
                                 user.setProfile(profile)
                                 res.status(200).send(user)
                             })
                     })
-            }).catch( (err) => {
-                res.status(500).send(err)
+            }).catch((err) => {
+            res.status(500).send(err)
         })
 
     }

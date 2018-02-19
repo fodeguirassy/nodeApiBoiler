@@ -15,7 +15,12 @@ module.exports = (app) => {
             email: raw.emails[0].value
         }
 
-        User.create({currentProfile: 'google', currentName: googleProfile.name, currentEmail: googleProfile.email})
+        User.create({
+            currentProfile: 'google',
+            currentName: googleProfile.name,
+            currentEmail: googleProfile.email,
+            currentPassword: req.defaultPassword
+        })
             .then((user) => {
                 Profile.create()
                     .then((profile) => {
